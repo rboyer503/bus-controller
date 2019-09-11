@@ -1,6 +1,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "SocketMgr.h"
+#include "JoystickMgr.h"
 
 using namespace std;
 using namespace cv;
@@ -14,6 +15,8 @@ int main()
 	SocketMgr socketMgr;
 	if (!socketMgr.Connect(serverHostname))
 		return 1;
+
+	JoystickMgr joystickMgr(&socketMgr);
 
 	while (!socketMgr.HasExited())
 	{

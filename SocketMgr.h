@@ -28,6 +28,7 @@ class SocketMgr
 	volatile bool m_exited;
 	std::unique_ptr<cv::Mat> m_currFrame;
 	boost::mutex m_frameMutex;
+	boost::mutex m_sendMutex;
 
 public:
 	SocketMgr();

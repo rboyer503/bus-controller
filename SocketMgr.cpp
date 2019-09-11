@@ -103,6 +103,7 @@ unique_ptr<Mat> SocketMgr::GetCurrentFrame()
 
 void SocketMgr::SendCommand(const char * command)
 {
+	boost::mutex::scoped_lock lock(m_sendMutex);
 	int ret;
 	if ((ret = send(m_cmdfd, command, strlen(command), 0)) < 0)
 	{
