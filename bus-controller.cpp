@@ -45,7 +45,10 @@ int main()
 		auto currFrame = socketMgr.GetCurrentFrame();
 		if (currFrame)
 		{
-			imshow(windowName, *currFrame);
+			if ( (currFrame->size().width > 0) && (currFrame->size().height > 0) )
+				imshow(windowName, *currFrame);
+			else
+				cerr << "Debug: Missed frame" << endl;
 		}
 	}
 

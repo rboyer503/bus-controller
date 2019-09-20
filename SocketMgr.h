@@ -47,6 +47,7 @@ private:
 	bool HostnameToIP(const char * hostname);
 	void ManageMonitorStream();
 	bool RecvFrame(char * pRawData, int & size);
+	bool RecvDataField(char * pData, int size);
 };
 
 #endif /* SOCKETMGR_H_ */

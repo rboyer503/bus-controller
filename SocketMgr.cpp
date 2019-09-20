@@ -142,10 +142,7 @@ void SocketMgr::ManageMonitorStream()
 	{
 		// Get a frame from the server.
 		if (!RecvFrame(pBuffer, size))
-		{
-			cerr << "Error: Failed to receive frame." << endl;
 			break;
-		}
 
 		// Decode into cv:Mat.
 		vector<char> buf(pBuffer, pBuffer + size);
@@ -172,26 +169,39 @@ void SocketMgr::ManageMonitorStream()
 
 bool SocketMgr::RecvFrame(char * pRawData, int & size)
 {
-	if ( recv(m_monfd, (char *)(&size), sizeof(size), 0) < 0 )
-		return false;
-
-	if (size > MAX_BUFFER_SIZE)
+	if ( !RecvDataField(reinterpret_cast<char *>(&size), sizeof(size)) )
 	{
-		cerr << "Error: Received frame too large for buffer." << endl;
+		cerr << "Error: Receive frame size failed." << endl;
 		return false;
 	}
 
-	int sizeRemaining = size;
-	while (sizeRemaining > 0)
+	if ( (size > MAX_BUFFER_SIZE) || (size <= 0) )
 	{
-		int bytesRecv = recv(m_monfd, pRawData, sizeRemaining, 0);
+		cerr << "Error: Invalid frame size " << size << "." << endl;
+		return false;
+	}
+
+	if ( !RecvDataField(pRawData, size) )
+	{
+		cerr << "Error: Receive frame failed." << endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool SocketMgr::RecvDataField(char * pData, int size)
+{
+	while (size > 0)
+	{
+		int bytesRecv = recv(m_monfd, pData, size, 0);
 		if (bytesRecv > 0)
 		{
-			pRawData += bytesRecv;
-			sizeRemaining -= bytesRecv;
+			pData += bytesRecv;
+			size -= bytesRecv;
 			continue;
 		}
-		if (bytesRecv == -1)
+		else if (bytesRecv == -1)
 		{
 			if ( (errno == EAGAIN) || (errno == EWOULDBLOCK) )
 				continue;
@@ -201,5 +211,5 @@ bool SocketMgr::RecvFrame(char * pRawData, int & size)
 		break;
 	}
 
-	return (sizeRemaining == 0);
+	return (size == 0);
 }
