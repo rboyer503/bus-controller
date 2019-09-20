@@ -48,6 +48,8 @@ void JoystickMgr::WorkerFunc()
 	int currMotor = 0;
 	bool updateServo = false;
 	bool updateMotor = false;
+	bool firstServo = true; // Skip first servo and motor readings since joystick sends -32767 instead of the expected 0.
+	bool firstMotor = true;
 	bool laneAssist = false;
 	ostringstream oss;
 
@@ -76,12 +78,26 @@ void JoystickMgr::WorkerFunc()
 
 				if (eventNum == 0)
 				{
-					currServo = event.value;
+					if (firstServo)
+					{
+						currServo = 0;
+						firstServo = false;
+					}
+					else
+						currServo = event.value;
+
 					updateServo = true;
 				}
 				else if (eventNum == 3)
 				{
-					currMotor = event.value;
+					if (firstMotor)
+					{
+						currMotor = 0;
+						firstMotor = false;
+					}
+					else
+						currMotor = event.value;
+
 					updateMotor = true;
 				}
 			}
