@@ -18,6 +18,9 @@ int main()
 
 	JoystickMgr joystickMgr(&socketMgr);
 
+	namedWindow(windowName, WINDOW_NORMAL);
+	resizeWindow(windowName, 640, 240);
+
 	while (!socketMgr.HasExited())
 	{
 		char c = waitKey(50);
