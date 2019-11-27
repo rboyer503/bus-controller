@@ -51,6 +51,7 @@ void JoystickMgr::WorkerFunc()
 	bool firstServo = true; // Skip first servo and motor readings since joystick sends -32767 instead of the expected 0.
 	bool firstMotor = true;
 	bool laneAssist = false;
+	bool autoPilot = false;
 	ostringstream oss;
 
 	while (1)
@@ -69,6 +70,25 @@ void JoystickMgr::WorkerFunc()
 					laneAssist = !laneAssist;
 					oss.str("");
 					oss << "laneassist " << (laneAssist ? "on" : "off");
+					m_pSocketMgr->SendCommand(oss.str().c_str());
+				}
+				else if ( (eventNum == 3) && (event.value) )
+				{
+					autoPilot = !autoPilot;
+					oss.str("");
+					oss << "autopilot " << (autoPilot ? "on" : "off");
+					m_pSocketMgr->SendCommand(oss.str().c_str());
+				}
+				else if ( (eventNum == 4) && (event.value) )
+				{
+					oss.str("");
+					oss << "shiftleft";
+					m_pSocketMgr->SendCommand(oss.str().c_str());
+				}
+				else if ( (eventNum == 5) && (event.value) )
+				{
+					oss.str("");
+					oss << "shiftright";
 					m_pSocketMgr->SendCommand(oss.str().c_str());
 				}
 			}
