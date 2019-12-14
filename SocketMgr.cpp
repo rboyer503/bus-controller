@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#define MAX_BUFFER_SIZE 80000 	// Large enough for .bmp formatted 320x240 image.
+#define MAX_BUFFER_SIZE 230454 	// 80000 	// Large enough for .bmp formatted 320x240 image.
 
 using namespace std;
 using namespace cv;

@@ -91,6 +91,12 @@ void JoystickMgr::WorkerFunc()
 					oss << "shiftright";
 					m_pSocketMgr->SendCommand(oss.str().c_str());
 				}
+				else if ( (eventNum == 6) && (event.value) )
+				{
+					oss.str("");
+					oss << "debugmode";
+					m_pSocketMgr->SendCommand(oss.str().c_str());
+				}
 			}
 			else if (event.isAxis())
 			{

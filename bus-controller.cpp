@@ -19,7 +19,7 @@ int main()
 	JoystickMgr joystickMgr(&socketMgr);
 
 	namedWindow(windowName, WINDOW_NORMAL);
-	resizeWindow(windowName, 640, 240);
+	resizeWindow(windowName, 640, 480);
 
 	while (!socketMgr.HasExited())
 	{
